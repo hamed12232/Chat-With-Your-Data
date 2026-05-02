@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: rag_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Hot-reload: mount source so --reload picks up changes
+      - ./backend:/app
+      # Persist Chroma vector data between restarts
+      - rag_chroma:/app/chroma_data
+    env_file:
+      - ./backend/.env.local
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: rag_frontend
+    ports:
+      - "3001:3000"
+    volumes:
+      # Hot-reload: mount source so next dev picks up changes
+      - ./frontend:/app
+      # Keep node_modules inside the container, not overwritten by the host mount
+      - /app/node_modules
+    env_file:
+      - ./frontend/.env.local
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  rag_chroma:
