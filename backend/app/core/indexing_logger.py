@@ -370,7 +370,12 @@ def log_chroma_stored(
     ids        = [ids[i] for i in order]
     documents  = [documents[i] for i in order]
     metadatas  = [metadatas[i] for i in order]
-    embeddings = [embeddings[i] for i in order] if embeddings else []
+    # Chroma may return embeddings as a NumPy ndarray; `if embeddings` is ambiguous.
+    try:
+        n_embeddings = len(embeddings)
+    except TypeError:
+        n_embeddings = 0
+    embeddings = [embeddings[i] for i in order] if n_embeddings > 0 else []
 
     if peek_ids:
         logger.info(

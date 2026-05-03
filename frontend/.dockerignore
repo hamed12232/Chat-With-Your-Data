@@ -1,0 +1,7 @@
+# Host build artifacts must not replace the container dev build
+.next
+out
+
+node_modules
+npm-debug.log*
+.env*.local

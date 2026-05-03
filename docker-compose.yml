@@ -29,10 +29,15 @@ services:
       - ./frontend:/app
       # Keep node_modules inside the container, not overwritten by the host mount
       - /app/node_modules
+      # Keep .next inside the container — host bind mount would replace it with a
+      # Windows/macOS .next (or none), breaking webpack chunks (e.g. ./403.js 404).
+      - /app/.next
     env_file:
       - ./frontend/.env.local
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8000
+      # Windows + bind mounts: more reliable file watching (reduces odd HMR 404s)
+      - WATCHPACK_POLLING=true
     depends_on:
       - backend
     restart: unless-stopped
