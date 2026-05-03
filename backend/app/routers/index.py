@@ -12,6 +12,6 @@ class IndexResponse(BaseModel):
 
 
 @router.post("", response_model=IndexResponse)
+@router.post("/", response_model=IndexResponse)
 async def index_documents(file: UploadFile = File(...)):
-    """Upload one PDF: multipart field must be named `file`."""
     return await index_document(file)

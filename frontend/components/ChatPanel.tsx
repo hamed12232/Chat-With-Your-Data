@@ -197,7 +197,7 @@ export default function ChatPanel() {
               <svg className="h-3.5 w-3.5" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M2.75 2A1.75 1.75 0 0 0 1 3.75v8.5C1 13.216 1.784 14 2.75 14h10.5A1.75 1.75 0 0 0 15 12.25v-5.5a.75.75 0 0 0-.22-.53l-4-4A.75.75 0 0 0 10.25 2H2.75Z" />
               </svg>
-              Index documents
+              Index Documents
             </button>
           </div>
         </div>
