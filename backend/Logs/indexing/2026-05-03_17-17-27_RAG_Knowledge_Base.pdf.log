@@ -1,0 +1,144 @@
+================================================================================
+  INDEXING PIPELINE  ·  RAG_Knowledge_Base.pdf
+  Started : 2026-05-03  17:17:27
+================================================================================
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 1 / 4  ·  BEFORE CHUNKING
+────────────────────────────────────────────────────────────────────────────────
+  File Name :        RAG_Knowledge_Base.pdf
+  File Size :        5,357 bytes  (5.2 KB)
+  Pages :            2
+  Total Chars :      4,768
+  Total Words :      776
+
+  Raw Text Preview (first 300 chars):
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Retrieval Augmented Generation What is RAG? Retrieval Augmented Generation │
+  │  (RAG) is a technique that improves the accuracy of Large Language Models  │
+  │ by connecting them to an external knowledge base at query time. Instead of │
+  │  relying solely on information baked into the model's weights during train │
+  │ ing, …                                                                     │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 2 / 4  ·  AFTER CHUNKING
+────────────────────────────────────────────────────────────────────────────────
+  Chunk Size (setting) : 500
+  Chunk Overlap (setting) : 50
+  Total Chunks :         11
+  Avg Chunk Length :     432 chars
+  Min Chunk Length :     338 chars
+  Max Chunk Length :     477 chars
+
+  Chunk Details:
+  ┌───────┬──────────────┬─────────────────────────────────────────────────┐
+  │  #    │  Length      │  Preview                                        │
+  ├───────┼──────────────┼─────────────────────────────────────────────────┤
+  │  #0000│  408 chars   │  Retrieval Augmented Generation What is RAG? R …│
+  │  #0001│  435 chars   │  questions about recent events, internal compa …│
+  │  #0002│  464 chars   │  chunks before indexing them. A typical chunk … │
+  │  #0003│  442 chars   │  each chunk into a vector, which is a list of … │
+  │  #0004│  417 chars   │  at both indexing time and query time, because …│
+  │  #0005│  338 chars   │  stored in the vector database. When a query a …│
+  │  #0006│  456 chars   │  The RAG Pipeline The RAG pipeline is divided … │
+  │  #0007│  412 chars   │  indexing, the vector database is searched for …│
+  │  #0008│  477 chars   │  more context but also increases prompt length …│
+  │  #0009│  461 chars   │  you can update or remove documents at any tim …│
+  │  #0010│  446 chars   │  the prompt. RAG is also not simply adding a d …│
+  └───────┴──────────────┴─────────────────────────────────────────────────┘
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 3 / 4  ·  EMBEDDING
+────────────────────────────────────────────────────────────────────────────────
+  Model :                    text-embedding-3-small
+  Chunks to Embed :          11
+  Vector Dimensions :        1536
+  Output Tensor Shape :      (11 chunks  ×  1536 dims)  =  16,896 floats total
+  Dtype :                    float32  (OpenAI default)
+  Memory Estimate :          ~66.0 KB
+  Status :                   ✓  Embeddings received from OpenAI
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 3 / 4  ·  EMBEDDING  —  VECTOR ANALYSIS
+────────────────────────────────────────────────────────────────────────────────
+  Showing 8 of 11 chunk-vectors  ·  4 of 1536 dimensions displayed
+
+  ┌────────┬───────────┬───────────┬───────────┬───────────┐
+  │ Chunk  │  dim[0]   │  dim[1]   │  dim[2]   │  dim[3]   │
+  ├────────┼───────────┼───────────┼───────────┼───────────┤
+  │ #0000  │ -0.01599  │ +0.01880  │ +0.02641  │ +0.01904  │
+  │ #0001  │ +0.00002  │ +0.00018  │ -0.00329  │ +0.04218  │
+  │ #0002  │ +0.01482  │ -0.01115  │ +0.02655  │ +0.00320  │
+  │ #0003  │ -0.00550  │ -0.02007  │ +0.01602  │ +0.00333  │
+  │ #0004  │ -0.01098  │ +0.05423  │ +0.02913  │ -0.00817  │
+  │ #0005  │ -0.04391  │ +0.01895  │ +0.02896  │ -0.00630  │
+  │ #0006  │ -0.00139  │ +0.03531  │ +0.01429  │ +0.00974  │
+  │ #0007  │ -0.02551  │ +0.02968  │ +0.02324  │ -0.01610  │
+  │ …      │ … +3 more │     …     │     …     │     …     │
+  └────────┴───────────┴───────────┴───────────┴───────────┘
+
+  HOW CHROMA FINDS THE BEST MATCHING CHUNKS
+  ············································································
+
+  Every chunk above is stored as a vector of 1536 floats.
+  When you ask a question, it is embedded into the same space.
+
+  Chroma compares the question vector (Q) against every stored
+  chunk vector (C) using a simple dot product:
+
+    cos(Q, C)  =  Q · C
+               =  Q[0]×C[0] + Q[1]×C[1] + … + Q[1535]×C[1535]
+
+  Score range:   -1.0  →  opposite meaning  (worst)
+                  0.0  →  unrelated
+                 +1.0  →  identical meaning  (best match)
+
+  Value range in your vectors:  min = -0.11084   max = +0.11816
+  ············································································
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 4 / 4  ·  CHROMA STORAGE
+────────────────────────────────────────────────────────────────────────────────
+  Collection :             rag_documents
+  Persist Dir :            ./chroma_data
+  Absolute Path :          /app/chroma_data
+  Docs Stored :            11
+  Total in Collection :    44
+  DB Files Present :       0cb42235-8b0f-4004-b1ef-05c75906611d, chroma.sqlite3
+  Status :                 ✓  Successfully persisted to disk
+
+  WHAT IS STORED INSIDE CHROMA  —  Row-by-Row Summary
+  ············································································
+
+  Each row = 1 chunk.  Columns: ID (short) · source file · chunk # · text preview · embedding peek
+
+  ┌────────┬────────────────────┬───────┬────────────────────────┬──────────────────────────┐
+  │ ID     │ Source File        │ Chunk#│ Text Preview           │ Embedding Peek           │
+  ├────────┼────────────────────┼───────┼────────────────────────┼──────────────────────────┤
+  │ 51f0a26│ RAG_Knowledge_Base…│   0   │ Retrieval Augmented Ge…│ [-0.016, +0.019, +0.026, …]│
+  │ 8eefc0c│ RAG_Knowledge_Base…│   1   │ questions about recent…│ [+0.000, +0.000, -0.003, …]│
+  │ f0e62dc│ RAG_Knowledge_Base…│   2   │ chunks before indexing…│ [+0.015, -0.011, +0.027, …]│
+  │ 5c68f39│ RAG_Knowledge_Base…│   3   │ each chunk into a vect…│ [-0.006, -0.020, +0.016, …]│
+  │ d823add│ RAG_Knowledge_Base…│   4   │ at both indexing time… │ [-0.011, +0.054, +0.029, …]│
+  │ 27bd685│ RAG_Knowledge_Base…│   5   │ stored in the vector d…│ [-0.044, +0.019, +0.029, …]│
+  │ cb83832│ RAG_Knowledge_Base…│   6   │ The RAG Pipeline The R…│ [-0.001, +0.035, +0.014, …]│
+  │ 7383dbd│ RAG_Knowledge_Base…│   7   │ indexing, the vector d…│ [-0.026, +0.030, +0.023, …]│
+  │ 0bdb955│ RAG_Knowledge_Base…│   8   │ more context but also… │ [-0.014, +0.009, +0.027, …]│
+  │ 57a506f│ RAG_Knowledge_Base…│   9   │ you can update or remo…│ [+0.003, +0.061, +0.008, …]│
+  │ …      │ …                  │   …   │ … 34 more rows         │ …                        │
+  └────────┴────────────────────┴───────┴────────────────────────┴──────────────────────────┘
+
+  Legend:
+    ID           →  first 8 chars of the UUID assigned at storage time
+    Source File  →  original PDF filename from metadata
+    Chunk#       →  position of this chunk inside the document (0-based)
+    Text Preview →  first ~22 chars of the stored chunk text
+    Embedding    →  first 3 of 1536 float values stored in Chroma
+  ············································································
+
+================================================================================
+  PIPELINE COMPLETE  ·  11 chunks indexed from 'RAG_Knowledge_Base.pdf'  in 0.80s
+  Finished : 2026-05-03  17:17:28
+================================================================================
+
