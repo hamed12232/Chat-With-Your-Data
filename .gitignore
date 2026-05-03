@@ -1,0 +1,39 @@
+# === Environment secrets ===
+.env.local
+**/.env.local
+
+# === Frontend ===
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.turbo/
+
+# === Python / Backend ===
+backend/__pycache__/
+backend/**/__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+backend/.venv/
+backend/venv/
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.mypy_cache/
+.ruff_cache/
+
+# === Chroma local data ===
+backend/chroma_data/
+chroma_data/
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === Editors ===
+.vscode/
+.idea/
+*.swp
+*.swo
