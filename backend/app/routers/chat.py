@@ -11,7 +11,7 @@ class ChatRequest(BaseModel):
 
 
 class ChatResponse(BaseModel):
-    answer: str
+    reply: str
 
 
 @router.post("", response_model=ChatResponse)
@@ -20,7 +20,7 @@ async def chat(body: ChatRequest) -> ChatResponse:
     Run the RAG retrieval pipeline and return the full GPT-4o answer.
 
     Accepts:  { "message": "user question here" }
-    Returns:  { "answer": "..." }
+    Returns:  { "reply": "..." }
     """
-    answer = await get_answer(body.message)
-    return ChatResponse(answer=answer)
+    reply = await get_answer(body.message)
+    return ChatResponse(reply=reply)

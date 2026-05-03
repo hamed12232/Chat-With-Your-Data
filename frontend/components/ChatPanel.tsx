@@ -4,16 +4,37 @@ import { useEffect, useRef, useState } from "react";
 import MessageBubble, { type Message } from "./MessageBubble";
 import IndexModal from "./IndexModal";
 
-let idCounter = 0;
-function uid() {
-  return String(++idCounter);
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
 }
 
-const EMPTY_STATE_HINTS = [
-  "What does this document say about…?",
-  "Summarise the key findings.",
-  "List all action items mentioned.",
-];
+function isChatReplyBody(value: unknown): value is { reply: string } {
+  return (
+    isRecord(value) &&
+    typeof value.reply === "string"
+  );
+}
+
+function shortErrorFromBody(body: unknown): string {
+  if (!isRecord(body)) return "Request failed.";
+  const { detail } = body;
+  if (typeof detail === "string") {
+    const t = detail.trim();
+    return t.length > 180 ? `${t.slice(0, 177)}…` : t;
+  }
+  if (Array.isArray(detail)) {
+    const first = detail[0];
+    if (isRecord(first)) {
+      const msg = first.msg;
+      if (typeof msg === "string" && msg.trim()) {
+        const t = msg.trim();
+        return t.length > 180 ? `${t.slice(0, 177)}…` : t;
+      }
+    }
+    return "Invalid request.";
+  }
+  return "Something went wrong.";
+}
 
 export default function ChatPanel() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -25,12 +46,10 @@ export default function ChatPanel() {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
-  // Auto-scroll to latest message
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isLoading]);
 
-  // Auto-resize textarea
   function handleInputChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setInput(e.target.value);
     const el = e.target;
@@ -39,11 +58,11 @@ export default function ChatPanel() {
   }
 
   async function sendMessage() {
-    const question = input.trim();
-    if (!question || isLoading) return;
+    const trimmed = input.trim();
+    if (!trimmed || isLoading) return;
 
-    const userMsg: Message = { id: uid(), role: "user", content: question };
-    setMessages((prev) => [...prev, userMsg]);
+    const userMsg: Message = { role: "user", content: trimmed };
+    setMessages((prev: Message[]) => [...prev, userMsg]);
     setInput("");
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -51,23 +70,40 @@ export default function ChatPanel() {
     setIsLoading(true);
 
     try {
-      const res = await fetch(`${apiUrl}/chat/`, {
+      const res = await fetch(`${apiUrl}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({ message: trimmed }),
       });
-      const data = await res.json();
+
+      let data: unknown;
+      try {
+        data = await res.json();
+      } catch {
+        data = null;
+      }
+
+      let assistantContent: string;
+      if (res.ok && isChatReplyBody(data)) {
+        assistantContent = data.reply;
+      } else {
+        assistantContent = res.ok
+          ? "Unexpected response from server."
+          : shortErrorFromBody(data);
+      }
+
       const assistantMsg: Message = {
-        id: uid(),
         role: "assistant",
-        content: res.ok ? data.answer : (data.detail ?? "Something went wrong."),
-        sources: res.ok ? data.sources : [],
+        content: assistantContent,
       };
-      setMessages((prev) => [...prev, assistantMsg]);
+      setMessages((prev: Message[]) => [...prev, assistantMsg]);
     } catch {
-      setMessages((prev) => [
+      setMessages((prev: Message[]) => [
         ...prev,
-        { id: uid(), role: "assistant", content: "Could not reach the server." },
+        {
+          role: "assistant",
+          content: "Could not reach the server.",
+        },
       ]);
     } finally {
       setIsLoading(false);
@@ -77,73 +113,31 @@ export default function ChatPanel() {
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      sendMessage();
+      void sendMessage();
     }
   }
 
+  const inputDisabled = isLoading;
+  const sendDisabled = !input.trim() || isLoading;
+
   return (
-    <div className="flex h-full flex-col">
-      {/* ── Header ── */}
-      <header className="flex flex-shrink-0 items-center justify-between border-b border-surface-border bg-surface-raised px-6 py-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/20">
-            <svg className="h-4 w-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-            </svg>
-          </div>
-          <div>
-            <h1 className="text-sm font-semibold text-white">Chat With Your Data</h1>
-            <p className="text-[11px] text-gray-500">RAG · GPT-4o · Chroma</p>
-          </div>
-        </div>
-
-        <a
-          href={`${apiUrl}/health`}
-          target="_blank"
-          rel="noreferrer"
-          className="rounded-md border border-surface-border px-3 py-1.5 text-xs text-gray-400 transition hover:border-accent/40 hover:text-accent"
-        >
-          /health
-        </a>
-      </header>
-
-      {/* ── Message list ── */}
-      <div className="messages-scroll flex-1 overflow-y-auto px-4 py-6 md:px-8">
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="messages-scroll min-h-0 flex-1 overflow-y-auto px-4 py-6 md:px-8">
         {messages.length === 0 ? (
-          <div className="flex h-full flex-col items-center justify-center gap-6 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/10">
-              <svg className="h-7 w-7 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-base font-medium text-white">Ask anything about your documents</p>
-              <p className="mt-1 text-sm text-gray-500">
-                Index a file first, then start chatting.
-              </p>
-            </div>
-            <div className="flex flex-col gap-2">
-              {EMPTY_STATE_HINTS.map((hint) => (
-                <button
-                  key={hint}
-                  onClick={() => setInput(hint)}
-                  className="rounded-xl border border-surface-border bg-surface-raised px-4 py-2.5 text-left text-sm text-gray-400 transition hover:border-accent/40 hover:text-gray-200"
-                >
-                  {hint}
-                </button>
-              ))}
-            </div>
+          <div className="flex h-full min-h-[40vh] flex-col items-center justify-center text-center">
+            <p className="max-w-md text-sm text-gray-400">
+              Index a document and start asking questions.
+            </p>
           </div>
         ) : (
-          <div className="mx-auto flex max-w-2xl flex-col gap-5">
-            {messages.map((msg) => (
-              <MessageBubble key={msg.id} message={msg} />
+          <div className="mx-auto flex max-w-2xl flex-col gap-5 pb-4">
+            {messages.map((msg, index) => (
+              <MessageBubble key={`${msg.role}-${index}`} message={msg} />
             ))}
 
-            {/* Typing indicator */}
             {isLoading && (
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-accent/20 text-accent text-xs font-semibold">
+                <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-accent/20 text-xs font-semibold text-accent">
                   AI
                 </div>
                 <div className="flex gap-1 rounded-2xl rounded-bl-sm border border-surface-border bg-surface-raised px-4 py-3">
@@ -163,7 +157,6 @@ export default function ChatPanel() {
         )}
       </div>
 
-      {/* ── Composer ── */}
       <div className="flex-shrink-0 border-t border-surface-border bg-surface-raised">
         <div className="mx-auto max-w-2xl px-4 py-4">
           <div className="flex items-end gap-2 rounded-2xl border border-surface-border bg-surface px-4 py-3 transition focus-within:border-accent/50">
@@ -173,12 +166,14 @@ export default function ChatPanel() {
               value={input}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              placeholder="Ask a question about your documents…"
-              className="flex-1 resize-none bg-transparent text-sm text-white placeholder-gray-500 outline-none"
+              disabled={inputDisabled}
+              placeholder="Ask a question…"
+              className="flex-1 resize-none bg-transparent text-sm text-white outline-none placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-60"
             />
             <button
-              onClick={sendMessage}
-              disabled={!input.trim() || isLoading}
+              type="button"
+              onClick={() => void sendMessage()}
+              disabled={sendDisabled}
               className="mb-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-accent text-white transition hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-40"
               aria-label="Send"
             >
@@ -188,9 +183,9 @@ export default function ChatPanel() {
             </button>
           </div>
 
-          {/* Index documents trigger — lives just below the composer */}
           <div className="mt-2 flex items-center justify-center">
             <button
+              type="button"
               onClick={() => setShowModal(true)}
               className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs text-gray-500 transition hover:bg-surface-border hover:text-gray-300"
             >
@@ -203,7 +198,6 @@ export default function ChatPanel() {
         </div>
       </div>
 
-      {/* ── Index modal ── */}
       {showModal && <IndexModal onClose={() => setShowModal(false)} />}
     </div>
   );
