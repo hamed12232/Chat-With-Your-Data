@@ -302,10 +302,16 @@ def log_chroma_stored(
     persist_dir: str,
     num_docs: int,
     collection=None,        # chromadb.Collection — passed in to query stored rows
+    peek_ids: list[str] | None = None,
 ) -> None:
-    """Section 4 — what was persisted in Chroma, including a peek inside the DB."""
-    import math
+    """
+    Section 4 — what was persisted in Chroma, including a peek inside the DB.
 
+    When `peek_ids` is set (the UUIDs from the current `collection.add` call),
+    only those rows are fetched for the table — otherwise a bare `collection.get()`
+    would list the whole collection and the "Source File" column could show
+    unrelated documents uploaded earlier.
+    """
     abs_dir = os.path.abspath(persist_dir)
 
     existing_files: list[str] = []
@@ -327,12 +333,18 @@ def log_chroma_stored(
     logger.info("  %-24s %s", "Status :",            "✓  Successfully persisted to disk")
     logger.info(BLANK)
 
-    # ── Peek inside: query every stored row ───────────────────────────────────
+    # ── Peek inside: rows from this run only (peek_ids), or whole collection ───
     if collection is None:
         return
 
     try:
-        result = collection.get(include=["documents", "metadatas", "embeddings"])
+        if peek_ids:
+            result = collection.get(
+                ids=peek_ids,
+                include=["documents", "metadatas", "embeddings"],
+            )
+        else:
+            result = collection.get(include=["documents", "metadatas", "embeddings"])
     except Exception:
         return
 
@@ -345,7 +357,29 @@ def log_chroma_stored(
     if not ids:
         return
 
-    logger.info("  WHAT IS STORED INSIDE CHROMA  —  Row-by-Row Summary")
+    def _chunk_order_key(row: int) -> int:
+        if row >= len(metadatas):
+            return row
+        v = metadatas[row].get("chunk_index", row)
+        try:
+            return int(v)
+        except (TypeError, ValueError):
+            return row
+
+    order = sorted(range(len(ids)), key=_chunk_order_key)
+    ids        = [ids[i] for i in order]
+    documents  = [documents[i] for i in order]
+    metadatas  = [metadatas[i] for i in order]
+    embeddings = [embeddings[i] for i in order] if embeddings else []
+
+    if peek_ids:
+        logger.info(
+            "  WHAT IS STORED INSIDE CHROMA  —  This upload only (%d new row%s)",
+            len(ids),
+            "" if len(ids) == 1 else "s",
+        )
+    else:
+        logger.info("  WHAT IS STORED INSIDE CHROMA  —  Entire collection (%d row%s)", len(ids), "" if len(ids) == 1 else "s")
     logger.info("  " + "·" * (WIDTH - 4))
     logger.info(BLANK)
     logger.info(

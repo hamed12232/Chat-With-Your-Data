@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse
 
 from app.routers import chat, index
 from app.core.indexing_logger import LOGS_DIR
+from app.core.chat_logger import CHAT_LOGS_DIR
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -16,6 +17,8 @@ logger = logging.getLogger("uvicorn.error")
 async def lifespan(app: FastAPI):
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
     logger.info("Indexing logs directory ready → %s", LOGS_DIR.resolve())
+    CHAT_LOGS_DIR.mkdir(parents=True, exist_ok=True)
+    logger.info("Chat logs directory ready     → %s", CHAT_LOGS_DIR.resolve())
     yield
 
 app = FastAPI(

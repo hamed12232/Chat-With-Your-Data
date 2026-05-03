@@ -15,6 +15,7 @@ class Settings(BaseSettings):
 
     # Chat / retrieval pipeline
     chat_retrieval_top_k: int = 4
+    chat_llm_temperature: float = 0.1
 
     model_config = SettingsConfigDict(
         env_file=".env.local",

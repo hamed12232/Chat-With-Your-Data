@@ -143,8 +143,16 @@ async def index_document(file: UploadFile) -> dict:
     try:
         client     = chromadb.PersistentClient(path=settings.chroma_persist_dir)
         collection = client.get_or_create_collection(name=settings.collection_name)
+
+        # Remove any previously indexed chunks from the same source file so
+        # re-uploading the same PDF never creates duplicates in the collection.
+        existing = collection.get(where={"source": filename}, include=[])
+        if existing["ids"]:
+            collection.delete(ids=existing["ids"])
+
+        new_ids = [str(uuid.uuid4()) for _ in documents]
         collection.add(
-            ids        = [str(uuid.uuid4()) for _ in documents],
+            ids        = new_ids,
             embeddings = vectors,
             documents  = [d.page_content for d in documents],
             metadatas  = [d.metadata for d in documents],
@@ -160,6 +168,7 @@ async def index_document(file: UploadFile) -> dict:
         persist_dir=settings.chroma_persist_dir,
         num_docs=len(documents),
         collection=collection,
+        peek_ids=new_ids,
     )
 
     log_pipeline_end(logger, filename, len(documents), start)
