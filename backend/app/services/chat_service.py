@@ -1,8 +1,14 @@
 """
-Chat service — handles retrieval from Chroma and LLM generation via LangChain.
-Implementation goes here in the next step.
+Chat service — retrieval + LLM (stub for demo / tutorial builds).
 """
 
 
 async def answer_question(question: str) -> dict:
-    raise NotImplementedError
+    _ = question
+    return {
+        "answer": (
+            "This is a demo reply. Hook up Chroma retrieval and your chat model "
+            "in `chat_service.py` when you are ready."
+        ),
+        "sources": [],
+    }

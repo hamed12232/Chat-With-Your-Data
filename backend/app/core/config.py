@@ -2,9 +2,17 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    # OpenAI
     openai_api_key: str = ""
+
+    # Chroma
     chroma_persist_dir: str = "./chroma_data"
     collection_name: str = "rag_documents"
+
+    # Indexing pipeline
+    index_chunk_size: int = 500
+    index_chunk_overlap: int = 50
+    index_embedding_model: str = "text-embedding-3-small"
 
     model_config = SettingsConfigDict(
         env_file=".env.local",

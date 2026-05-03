@@ -12,7 +12,6 @@ export default function IndexModal({ onClose }: IndexModalProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [uploadState, setUploadState] = useState<UploadState>("idle");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -32,24 +31,22 @@ export default function IndexModal({ onClose }: IndexModalProps) {
   async function handleUpload() {
     if (files.length === 0) return;
     setUploadState("uploading");
-    setErrorMessage("");
 
     const formData = new FormData();
-    files.forEach((f) => formData.append("files", f));
+    files.forEach((f) => formData.append("file", f));
 
     try {
-      const res = await fetch(`${apiUrl}/index/`, {
+      const res = await fetch(`${apiUrl}/index`, {
         method: "POST",
         body: formData,
       });
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data?.detail ?? `Server error ${res.status}`);
+        setUploadState("error");
+        return;
       }
       setUploadState("success");
-    } catch (err: unknown) {
+    } catch {
       setUploadState("error");
-      setErrorMessage(err instanceof Error ? err.message : "Upload failed");
     }
   }
 
@@ -92,13 +89,13 @@ export default function IndexModal({ onClose }: IndexModalProps) {
                 Drop PDF files here, or{" "}
                 <span className="text-accent underline underline-offset-2">browse</span>
               </p>
-              <p className="mt-1 text-xs text-gray-500">PDF, TXT — up to 50 MB each</p>
+              <p className="mt-1 text-xs text-gray-500">PDF only</p>
             </div>
             <input
               ref={fileInputRef}
               type="file"
               multiple
-              accept=".pdf,.txt"
+              accept=".pdf"
               className="hidden"
               onChange={handleFileChange}
             />
@@ -137,7 +134,7 @@ export default function IndexModal({ onClose }: IndexModalProps) {
 
         {/* Error message */}
         {uploadState === "error" && (
-          <p className="mt-3 text-xs text-red-400">{errorMessage}</p>
+          <p className="mt-3 text-xs text-red-400">Could not index — try another PDF.</p>
         )}
 
         {/* Actions */}

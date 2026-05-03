@@ -1,5 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from pydantic import BaseModel
+
+from app.services.chat_service import answer_question
 
 router = APIRouter(prefix="/chat", tags=["chat"])
 
@@ -15,8 +17,5 @@ class ChatResponse(BaseModel):
 
 @router.post("/", response_model=ChatResponse)
 async def chat(body: ChatRequest):
-    """
-    Retrieve relevant chunks from Chroma, then generate an answer via GPT-4o.
-    Implementation delegated to chat_service.
-    """
-    raise HTTPException(status_code=501, detail="Not implemented yet")
+    """Demo: returns a placeholder from `chat_service.answer_question`."""
+    return await answer_question(body.question)

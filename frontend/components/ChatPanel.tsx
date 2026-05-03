@@ -60,14 +60,14 @@ export default function ChatPanel() {
       const assistantMsg: Message = {
         id: uid(),
         role: "assistant",
-        content: res.ok ? data.answer : (data.detail ?? "Something went wrong."),
+        content: res.ok ? data.answer : "Request failed.",
         sources: res.ok ? data.sources : [],
       };
       setMessages((prev) => [...prev, assistantMsg]);
     } catch {
       setMessages((prev) => [
         ...prev,
-        { id: uid(), role: "assistant", content: "Could not reach the server." },
+        { id: uid(), role: "assistant", content: "Could not reach the API." },
       ]);
     } finally {
       setIsLoading(false);

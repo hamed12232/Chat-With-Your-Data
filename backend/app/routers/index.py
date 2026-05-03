@@ -1,13 +1,17 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
-from typing import List
+from fastapi import APIRouter, File, UploadFile
+from pydantic import BaseModel
+
+from app.services.index_service import index_document
 
 router = APIRouter(prefix="/index", tags=["index"])
 
 
-@router.post("/")
-async def index_documents(files: List[UploadFile] = File(...)):
-    """
-    Accept one or more uploaded files, chunk, embed, and store them in Chroma.
-    Implementation delegated to index_service.
-    """
-    raise HTTPException(status_code=501, detail="Not implemented yet")
+class IndexResponse(BaseModel):
+    status: str
+    chunks: int
+
+
+@router.post("", response_model=IndexResponse)
+async def index_documents(file: UploadFile = File(...)):
+    """Upload one PDF: multipart field must be named `file`."""
+    return await index_document(file)
