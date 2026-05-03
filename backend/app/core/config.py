@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     index_chunk_size: int = 500
     index_chunk_overlap: int = 50
 
+    # Chat / retrieval pipeline
+    chat_retrieval_top_k: int = 4
+
     model_config = SettingsConfigDict(
         env_file=".env.local",
         env_file_encoding="utf-8",

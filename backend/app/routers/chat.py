@@ -1,22 +1,26 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from pydantic import BaseModel
+
+from app.services.chat_service import get_answer
 
 router = APIRouter(prefix="/chat", tags=["chat"])
 
 
 class ChatRequest(BaseModel):
-    question: str
+    message: str
 
 
 class ChatResponse(BaseModel):
     answer: str
-    sources: list[str] = []
 
 
-@router.post("/", response_model=ChatResponse)
-async def chat(body: ChatRequest):
+@router.post("", response_model=ChatResponse)
+async def chat(body: ChatRequest) -> ChatResponse:
     """
-    Retrieve relevant chunks from Chroma, then generate an answer via GPT-4o.
-    Implementation delegated to chat_service.
+    Run the RAG retrieval pipeline and return the full GPT-4o answer.
+
+    Accepts:  { "message": "user question here" }
+    Returns:  { "answer": "..." }
     """
-    raise HTTPException(status_code=501, detail="Not implemented yet")
+    answer = await get_answer(body.message)
+    return ChatResponse(answer=answer)
