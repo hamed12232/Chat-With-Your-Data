@@ -35,7 +35,7 @@ export default function IndexModal({ onClose }: IndexModalProps) {
     setErrorMessage("");
 
     const formData = new FormData();
-    files.forEach((f) => formData.append("files", f));
+    files.forEach((f) => formData.append("file", f));
 
     try {
       const res = await fetch(`${apiUrl}/index/`, {
