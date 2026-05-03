@@ -89,18 +89,18 @@ export default function IndexModal({ onClose }: IndexModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#000b1e]/75 backdrop-blur-md"
       onClick={handleBackdropClick}
     >
-      <div className="relative w-full max-w-md rounded-2xl border border-surface-border bg-surface-raised p-6 shadow-2xl">
+      <div className="relative w-full max-w-md rounded-2xl border border-cyan-400/15 bg-[#061428]/95 p-6 shadow-[0_24px_80px_rgba(0,0,0,0.55),0_0_0_1px_rgba(34,211,238,0.08),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-xl">
 
         {/* Header */}
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-base font-semibold text-white">Index Documents</h2>
+          <h2 className="text-base font-semibold text-[#e8f4ff]">Index Documents</h2>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="rounded p-1 text-gray-400 transition hover:bg-surface-border hover:text-white"
+            className="rounded p-1 text-[#89a3c9] transition hover:bg-cyan-400/10 hover:text-[#e8f4ff]"
           >
             <svg className="h-4 w-4" viewBox="0 0 16 16" fill="currentColor">
               <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z" />
@@ -114,10 +114,10 @@ export default function IndexModal({ onClose }: IndexModalProps) {
             onDragOver={handleDragOver}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
-            className="flex cursor-pointer flex-col items-center gap-3 rounded-xl border-2 border-dashed border-surface-border bg-surface/60 px-6 py-10 transition hover:border-accent/50 hover:bg-surface"
+            className="flex cursor-pointer flex-col items-center gap-3 rounded-xl border-2 border-dashed border-cyan-400/20 bg-[#000b1e]/50 px-6 py-10 transition hover:border-cyan-400/40 hover:bg-cyan-400/5"
           >
             <svg
-              className="h-8 w-8 text-gray-500"
+              className="h-8 w-8 text-[#5c7399]"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -130,11 +130,11 @@ export default function IndexModal({ onClose }: IndexModalProps) {
               />
             </svg>
             <div className="text-center">
-              <p className="text-sm font-medium text-gray-300">
+              <p className="text-sm font-medium text-[#e8f4ff]">
                 Drop a PDF here, or{" "}
-                <span className="text-accent underline underline-offset-2">browse</span>
+                <span className="text-[#5ce1e6] underline underline-offset-2">browse</span>
               </p>
-              <p className="mt-1 text-xs text-gray-500">PDF files only — up to 50 MB</p>
+              <p className="mt-1 text-xs text-[#5c7399]">PDF files only — up to 50 MB</p>
             </div>
             <input
               ref={fileInputRef}
@@ -148,21 +148,21 @@ export default function IndexModal({ onClose }: IndexModalProps) {
 
         {/* Non-PDF drop error */}
         {dropError && (
-          <p className="mt-2 text-xs text-red-400">{dropError}</p>
+          <p className="mt-2 text-xs text-red-300">{dropError}</p>
         )}
 
         {/* Selected file name */}
         {file && status !== "success" && (
-          <div className="mt-3 flex items-center gap-2 rounded-lg border border-surface-border bg-surface px-3 py-2">
+          <div className="mt-3 flex items-center gap-2 rounded-lg border border-cyan-400/15 bg-[#000b1e]/60 px-3 py-2">
             <svg
-              className="h-4 w-4 flex-shrink-0 text-accent"
+              className="h-4 w-4 flex-shrink-0 text-cyan-400"
               viewBox="0 0 16 16"
               fill="currentColor"
             >
               <path d="M3.75 2A1.75 1.75 0 0 0 2 3.75v8.5C2 13.216 2.784 14 3.75 14h8.5A1.75 1.75 0 0 0 14 12.25v-5.5a.75.75 0 0 0-.22-.53l-4-4A.75.75 0 0 0 9.25 2H3.75Z" />
             </svg>
-            <span className="truncate text-xs text-gray-300">{file.name}</span>
-            <span className="ml-auto flex-shrink-0 text-xs text-gray-600">
+            <span className="truncate text-xs text-[#e8f4ff]">{file.name}</span>
+            <span className="ml-auto flex-shrink-0 text-xs text-[#5c7399]">
               {(file.size / 1024).toFixed(0)} KB
             </span>
           </div>
@@ -170,9 +170,9 @@ export default function IndexModal({ onClose }: IndexModalProps) {
 
         {/* Status section */}
         {status === "uploading" && (
-          <div className="mt-4 flex items-center gap-2 rounded-lg border border-surface-border bg-surface px-4 py-3">
+          <div className="mt-4 flex items-center gap-2 rounded-lg border border-cyan-400/15 bg-[#000b1e]/50 px-4 py-3">
             <svg
-              className="h-4 w-4 flex-shrink-0 animate-spin text-accent"
+              className="h-4 w-4 flex-shrink-0 animate-spin text-cyan-400"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -183,7 +183,7 @@ export default function IndexModal({ onClose }: IndexModalProps) {
                 d="M12 3a9 9 0 1 0 9 9"
               />
             </svg>
-            <p className="text-sm text-gray-300">Indexing your document...</p>
+            <p className="text-sm text-[#89a3c9]">Indexing your document...</p>
           </div>
         )}
 
@@ -200,7 +200,7 @@ export default function IndexModal({ onClose }: IndexModalProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
               </svg>
             </div>
-            <p className="text-sm font-medium text-white">
+            <p className="text-sm font-medium text-[#e8f4ff]">
               Done! {chunks} chunk{chunks !== 1 ? "s" : ""} indexed successfully.
             </p>
           </div>
@@ -230,7 +230,7 @@ export default function IndexModal({ onClose }: IndexModalProps) {
           {status === "success" ? (
             <button
               onClick={onClose}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:bg-accent-hover"
+              className="rounded-lg bg-gradient-to-br from-[#2563eb] to-[#0891b2] px-4 py-2 text-sm font-medium text-white shadow-[0_4px_16px_rgba(37,99,235,0.35)] transition hover:brightness-110"
             >
               Done
             </button>
@@ -238,14 +238,14 @@ export default function IndexModal({ onClose }: IndexModalProps) {
             <>
               <button
                 onClick={onClose}
-                className="rounded-lg px-4 py-2 text-sm text-gray-400 transition hover:text-white"
+                className="rounded-lg px-4 py-2 text-sm text-[#89a3c9] transition hover:bg-cyan-400/10 hover:text-[#e8f4ff]"
               >
                 Cancel
               </button>
               <button
                 onClick={handleStartIndexing}
                 disabled={!canIndex}
-                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-lg bg-gradient-to-br from-[#2563eb] to-[#0891b2] px-4 py-2 text-sm font-medium text-white shadow-[0_4px_16px_rgba(37,99,235,0.35)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Start Indexing
               </button>
