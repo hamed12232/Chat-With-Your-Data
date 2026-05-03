@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     index_chunk_overlap: int = 50
     index_embedding_model: str = "text-embedding-3-small"
 
+    # Chat / retrieval pipeline
+    chat_retrieval_top_k: int = 4
+
     model_config = SettingsConfigDict(
         env_file=".env.local",
         env_file_encoding="utf-8",

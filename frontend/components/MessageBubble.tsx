@@ -6,7 +6,6 @@ export interface Message {
   id: string;
   role: Role;
   content: string;
-  sources?: string[];
 }
 
 interface MessageBubbleProps {
@@ -37,20 +36,6 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
         >
           {message.content}
         </div>
-
-        {/* Source citations */}
-        {!isUser && message.sources && message.sources.length > 0 && (
-          <div className="mt-1 flex flex-wrap gap-1 px-1">
-            {message.sources.map((src, i) => (
-              <span
-                key={i}
-                className="rounded bg-surface-border px-2 py-0.5 font-mono text-[10px] text-gray-400"
-              >
-                {src}
-              </span>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* Avatar — user only */}

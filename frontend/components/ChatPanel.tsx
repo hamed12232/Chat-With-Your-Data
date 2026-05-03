@@ -61,7 +61,6 @@ export default function ChatPanel() {
         id: uid(),
         role: "assistant",
         content: res.ok ? data.answer : "Request failed.",
-        sources: res.ok ? data.sources : [],
       };
       setMessages((prev) => [...prev, assistantMsg]);
     } catch {
