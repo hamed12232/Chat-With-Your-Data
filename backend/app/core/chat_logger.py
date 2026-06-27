@@ -242,9 +242,9 @@ def log_generate(
     _box(logger, "[ USER TURN  (context + question) ]", user_turn)
 
     # ── Full model answer ─────────────────────────────────────────────────────
-    _box(logger, "[ GPT ANSWER ]", answer)
+    _box(logger, "[ GEMINI ANSWER ]", answer)
 
-    logger.info("  %-26s %s", "Status :", "✓  Answer received from OpenAI")
+    logger.info("  %-26s %s", "Status :", "✓  Answer received from Gemini")
     logger.info(BLANK)
 
 

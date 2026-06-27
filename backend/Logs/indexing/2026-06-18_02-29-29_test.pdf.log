@@ -1,0 +1,112 @@
+================================================================================
+  INDEXING PIPELINE  ·  test.pdf
+  Started : 2026-06-18  02:29:29
+================================================================================
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 1 / 4  ·  BEFORE CHUNKING
+────────────────────────────────────────────────────────────────────────────────
+  File Name :        test.pdf
+  File Size :        13,264 bytes  (13.0 KB)
+  Pages :            1
+  Total Chars :      15
+  Total Words :      4
+
+  Raw Text Preview (first 300 chars):
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Dumm y PDF file                                                            │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 2 / 4  ·  AFTER CHUNKING
+────────────────────────────────────────────────────────────────────────────────
+  Chunk Size (setting) : 500
+  Chunk Overlap (setting) : 50
+  Total Chunks :         1
+  Avg Chunk Length :     15 chars
+  Min Chunk Length :     15 chars
+  Max Chunk Length :     15 chars
+
+  Chunk Details:
+  ┌───────┬──────────────┬─────────────────────────────────────────────────┐
+  │  #    │  Length      │  Preview                                        │
+  ├───────┼──────────────┼─────────────────────────────────────────────────┤
+  │  #0000│  15 chars    │  Dumm y PDF file                                │
+  └───────┴──────────────┴─────────────────────────────────────────────────┘
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 3 / 4  ·  EMBEDDING
+────────────────────────────────────────────────────────────────────────────────
+  Model :                    intfloat/multilingual-e5-base
+  Chunks to Embed :          1
+  Vector Dimensions :        768
+  Output Tensor Shape :      (1 chunks  ×  768 dims)  =  768 floats total
+  Dtype :                    float32
+  Memory Estimate :          ~3.0 KB
+  Status :                   ✓  Embeddings calculated locally
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 3 / 4  ·  EMBEDDING  —  VECTOR ANALYSIS
+────────────────────────────────────────────────────────────────────────────────
+  Showing 1 of 1 chunk-vectors  ·  4 of 768 dimensions displayed
+
+  ┌────────┬───────────┬───────────┬───────────┬───────────┐
+  │ Chunk  │  dim[0]   │  dim[1]   │  dim[2]   │  dim[3]   │
+  ├────────┼───────────┼───────────┼───────────┼───────────┤
+  │ #0000  │ -0.00047  │ +0.02254  │ -0.02348  │ +0.02021  │
+  └────────┴───────────┴───────────┴───────────┴───────────┘
+
+  HOW CHROMA FINDS THE BEST MATCHING CHUNKS
+  ············································································
+
+  Every chunk above is stored as a vector of 768 floats.
+  When you ask a question, it is embedded into the same space.
+
+  Chroma compares the question vector (Q) against every stored
+  chunk vector (C) using a simple dot product:
+
+    cos(Q, C)  =  Q · C
+               =  Q[0]×C[0] + Q[1]×C[1] + … + Q[767]×C[767]
+
+  Score range:   -1.0  →  opposite meaning  (worst)
+                  0.0  →  unrelated
+                 +1.0  →  identical meaning  (best match)
+
+  Value range in your vectors:  min = -0.21758   max = +0.13899
+  ············································································
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 4 / 4  ·  CHROMA STORAGE
+────────────────────────────────────────────────────────────────────────────────
+  Collection :             rag_documents
+  Persist Dir :            ./chroma_data
+  Absolute Path :          D:\rag_project\Chat-With-Your-Data\backend\chroma_data
+  Docs Stored :            1
+  Total in Collection :    1
+  DB Files Present :       c4242962-f374-4033-853c-5bb06946266e, chroma.sqlite3
+  Status :                 ✓  Successfully persisted to disk
+
+  WHAT IS STORED INSIDE CHROMA  —  Row-by-Row Summary
+  ············································································
+
+  Each row = 1 chunk.  Columns: ID (short) · source file · chunk # · text preview · embedding peek
+
+  ┌────────┬────────────────────┬───────┬────────────────────────┬──────────────────────────┐
+  │ ID     │ Source File        │ Chunk#│ Text Preview           │ Embedding Peek           │
+  ├────────┼────────────────────┼───────┼────────────────────────┼──────────────────────────┤
+  │ 78592bc│ test.pdf           │   0   │ Dumm y PDF file        │ [-0.000, +0.023, -0.023, …]│
+  └────────┴────────────────────┴───────┴────────────────────────┴──────────────────────────┘
+
+  Legend:
+    ID           →  first 8 chars of the UUID assigned at storage time
+    Source File  →  original PDF filename from metadata
+    Chunk#       →  position of this chunk inside the document (0-based)
+    Text Preview →  first ~22 chars of the stored chunk text
+    Embedding    →  first 3 of 768 float values stored in Chroma
+  ············································································
+
+================================================================================
+  PIPELINE COMPLETE  ·  1 chunks indexed from 'test.pdf'  in 1412.66s
+  Finished : 2026-06-18  02:53:02
+================================================================================
+

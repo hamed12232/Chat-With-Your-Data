@@ -1,0 +1,186 @@
+================================================================================
+  CHAT PIPELINE
+  Started : 2026-06-25  18:14:09
+================================================================================
+
+  User Message:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ how is hamed level in flutter jr or senior                                 │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 1 / 4  ·  EMBED QUERY
+────────────────────────────────────────────────────────────────────────────────
+  Model :                    intfloat/multilingual-e5-base
+  Query Length :             42 chars
+  Vector Dimensions :        768
+  Memory Estimate :          ~3.0 KB
+  Query Vector Sample :     
+  [+0.00520,  +0.04808,  -0.01882,  +0.04648,  +0.01261,  -0.03597,  …]
+  Status :                   ✓  Query vector ready
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 2 / 4  ·  RETRIEVE CHUNKS
+────────────────────────────────────────────────────────────────────────────────
+  Top-K Setting :            4
+  Chunks Retrieved :         4
+  Status :                   ✓  Chunks retrieved from Chroma
+
+  Retrieved Chunks:
+  ┌────────┬──────────┬──────────┬────────────────────────────────────────┐
+  │ #      │ Distance │   Chars  │ Text Preview                           │
+  ├────────┼──────────┼──────────┼────────────────────────────────────────┤
+  │ #0     │  0.3017  │    498   │ Hamed Ahmed Hamed Flutter Developer …  │
+  │ #1     │  0.3017  │    498   │ Hamed Ahmed Hamed Flutter Developer …  │
+  │ #2     │  0.3617  │    437   │ Solid Principles Certificate — Udemy … │
+  │ #3     │  0.3617  │    437   │ Solid Principles Certificate — Udemy … │
+  └────────┴──────────┴──────────┴────────────────────────────────────────┘
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 3 / 4  ·  BUILD CONTEXT
+────────────────────────────────────────────────────────────────────────────────
+  Chunks Joined :            4
+  Context Length :           1886 chars
+  Context Words :            253
+
+  Chunk 1 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Hamed Ahmed Hamed                                                          │
+  │ Flutter Developer                                                          │
+  │ hamedelshafeei41 @gmail.com 01094027375 Cairo linkedin github medium       │
+  │ PROFILE                                                                    │
+  │ Flutter Developer with 1 year of practical experience building production  │
+  │ mobile apps for iOS/ Android across e-commerce, tracking                   │
+  │ systems, booking, social, and dashboard platforms. Experienced in Clean Ar │
+  │ chitecture and BLoC/Cubit.  Integrating maps, payment                      │
+  │ gateways, REST APIs while focusing on performance and clean code. Delivere │
+  │ d production applications, including a Muslim app                          │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Chunk 2 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Hamed Ahmed Hamed                                                          │
+  │ Flutter Developer                                                          │
+  │ hamedelshafeei41 @gmail.com 01094027375 Cairo linkedin github medium       │
+  │ PROFILE                                                                    │
+  │ Flutter Developer with 1 year of practical experience building production  │
+  │ mobile apps for iOS/ Android across e-commerce, tracking                   │
+  │ systems, booking, social, and dashboard platforms. Experienced in Clean Ar │
+  │ chitecture and BLoC/Cubit.  Integrating maps, payment                      │
+  │ gateways, REST APIs while focusing on performance and clean code. Delivere │
+  │ d production applications, including a Muslim app                          │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Chunk 3 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Solid Principles Certificate — Udemy                                       │
+  │ Mobile App Instructor (Flutter) [4 monthes] — Az-SENCS                     │
+  │ Certificate in Mobile Application Devolper using Flutter (120h) — ITI      │
+  │ Complete Flutter & Dart Development (Arabic) [54h] — Udemy                 │
+  │ Flutter Development Diplome (60h) — Easy Learn Academy                     │
+  │ EF SET English Certificate (B1 Intermediate) — EF SET                      │
+  │ Honorable Mention in the 2023 ECPC Qualifications — ICPC                   │
+  │ LANGUAGES                                                                  │
+  │ Arabic                                                                     │
+  │ (Native)English                                                            │
+  │ B1 (Intermediate)                                                          │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Chunk 4 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Solid Principles Certificate — Udemy                                       │
+  │ Mobile App Instructor (Flutter) [4 monthes] — Az-SENCS                     │
+  │ Certificate in Mobile Application Devolper using Flutter (120h) — ITI      │
+  │ Complete Flutter & Dart Development (Arabic) [54h] — Udemy                 │
+  │ Flutter Development Diplome (60h) — Easy Learn Academy                     │
+  │ EF SET English Certificate (B1 Intermediate) — EF SET                      │
+  │ Honorable Mention in the 2023 ECPC Qualifications — ICPC                   │
+  │ LANGUAGES                                                                  │
+  │ Arabic                                                                     │
+  │ (Native)English                                                            │
+  │ B1 (Intermediate)                                                          │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Status :                   ✓  Context string assembled
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 4 / 4  ·  GENERATE RESPONSE
+────────────────────────────────────────────────────────────────────────────────
+  Model :                    gemini-2.5-flash
+  Est. Prompt Tokens :       ~529 tokens
+  Est. Reply Tokens :        ~28 tokens
+  Answer Length :            114 chars
+
+  [ SYSTEM PROMPT ]
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ You are a helpful assistant. Answer the user's question using ONLY the con │
+  │ text provided. If the answer is not in the context, say: I don't know base │
+  │ d on the provided documents.                                               │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  [ USER TURN  (context + question) ]
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Context:                                                                   │
+  │                                                                            │
+  │ Hamed Ahmed Hamed                                                          │
+  │ Flutter Developer                                                          │
+  │ hamedelshafeei41 @gmail.com 01094027375 Cairo linkedin github medium       │
+  │ PROFILE                                                                    │
+  │ Flutter Developer with 1 year of practical experience building production  │
+  │ mobile apps for iOS/ Android across e-commerce, tracking                   │
+  │ systems, booking, social, and dashboard platforms. Experienced in Clean Ar │
+  │ chitecture and BLoC/Cubit.  Integrating maps, payment                      │
+  │ gateways, REST APIs while focusing on performance and clean code. Delivere │
+  │ d production applications, including a Muslim app                          │
+  │                                                                            │
+  │ Hamed Ahmed Hamed                                                          │
+  │ Flutter Developer                                                          │
+  │ hamedelshafeei41 @gmail.com 01094027375 Cairo linkedin github medium       │
+  │ PROFILE                                                                    │
+  │ Flutter Developer with 1 year of practical experience building production  │
+  │ mobile apps for iOS/ Android across e-commerce, tracking                   │
+  │ systems, booking, social, and dashboard platforms. Experienced in Clean Ar │
+  │ chitecture and BLoC/Cubit.  Integrating maps, payment                      │
+  │ gateways, REST APIs while focusing on performance and clean code. Delivere │
+  │ d production applications, including a Muslim app                          │
+  │                                                                            │
+  │ Solid Principles Certificate — Udemy                                       │
+  │ Mobile App Instructor (Flutter) [4 monthes] — Az-SENCS                     │
+  │ Certificate in Mobile Application Devolper using Flutter (120h) — ITI      │
+  │ Complete Flutter & Dart Development (Arabic) [54h] — Udemy                 │
+  │ Flutter Development Diplome (60h) — Easy Learn Academy                     │
+  │ EF SET English Certificate (B1 Intermediate) — EF SET                      │
+  │ Honorable Mention in the 2023 ECPC Qualifications — ICPC                   │
+  │ LANGUAGES                                                                  │
+  │ Arabic                                                                     │
+  │ (Native)English                                                            │
+  │ B1 (Intermediate)                                                          │
+  │                                                                            │
+  │ Solid Principles Certificate — Udemy                                       │
+  │ Mobile App Instructor (Flutter) [4 monthes] — Az-SENCS                     │
+  │ Certificate in Mobile Application Devolper using Flutter (120h) — ITI      │
+  │ Complete Flutter & Dart Development (Arabic) [54h] — Udemy                 │
+  │ Flutter Development Diplome (60h) — Easy Learn Academy                     │
+  │ EF SET English Certificate (B1 Intermediate) — EF SET                      │
+  │ Honorable Mention in the 2023 ECPC Qualifications — ICPC                   │
+  │ LANGUAGES                                                                  │
+  │ Arabic                                                                     │
+  │ (Native)English                                                            │
+  │ B1 (Intermediate)                                                          │
+  │                                                                            │
+  │ Question: how is hamed level in flutter jr or senior                       │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  [ GEMINI ANSWER ]
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Based on the provided context, Hamed has 1 year of practical experience, w │
+  │ hich typically indicates a junior level.                                   │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Status :                   ✓  Answer received from Gemini
+
+================================================================================
+  PIPELINE COMPLETE  ·  Total elapsed: 22.58s
+  Finished : 2026-06-25  18:14:31
+================================================================================
+

@@ -1,23 +1,11 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers import chat, index
 
 app = FastAPI(
     title="RAG Chatbot API",
-    description="Retrieval-Augmented Generation backend powered by LangChain, Chroma, and OpenAI.",
+    description="Retrieval-Augmented Generation backend powered by LangChain, Chroma, and Google Gemini.",
     version="0.1.0",
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:3001",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
 )
 
 app.include_router(index.router)

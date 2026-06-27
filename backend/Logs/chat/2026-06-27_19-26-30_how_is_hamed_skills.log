@@ -1,0 +1,181 @@
+================================================================================
+  CHAT PIPELINE
+  Started : 2026-06-27  19:26:30
+================================================================================
+
+  User Message:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ how is hamed skills?                                                       │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 1 / 4  ·  EMBED QUERY
+────────────────────────────────────────────────────────────────────────────────
+  Model :                    intfloat/multilingual-e5-base
+  Query Length :             20 chars
+  Vector Dimensions :        768
+  Memory Estimate :          ~3.0 KB
+  Query Vector Sample :     
+  [+0.00732,  +0.07027,  -0.01114,  +0.05740,  +0.03931,  -0.03958,  …]
+  Status :                   ✓  Query vector ready
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 2 / 4  ·  RETRIEVE CHUNKS
+────────────────────────────────────────────────────────────────────────────────
+  Top-K Setting :            4
+  Chunks Retrieved :         4
+  Status :                   ✓  Chunks retrieved from Chroma
+
+  Retrieved Chunks:
+  ┌────────┬──────────┬──────────┬────────────────────────────────────────┐
+  │ #      │ Distance │   Chars  │ Text Preview                           │
+  ├────────┼──────────┼──────────┼────────────────────────────────────────┤
+  │ #0     │  0.3545  │    498   │ Hamed Ahmed Hamed Flutter Developer …  │
+  │ #1     │  0.3545  │    498   │ Hamed Ahmed Hamed Flutter Developer …  │
+  │ #2     │  0.3996  │    407   │ • Built an AI medical assistant usin … │
+  │ #3     │  0.3996  │    407   │ • Built an AI medical assistant usin … │
+  └────────┴──────────┴──────────┴────────────────────────────────────────┘
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 3 / 4  ·  BUILD CONTEXT
+────────────────────────────────────────────────────────────────────────────────
+  Chunks Joined :            4
+  Context Length :           1826 chars
+  Context Words :            253
+
+  Chunk 1 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Hamed Ahmed Hamed                                                          │
+  │ Flutter Developer                                                          │
+  │ hamedelshafeei41 @gmail.com 01094027375 Cairo linkedin github medium       │
+  │ PROFILE                                                                    │
+  │ Flutter Developer with 1 year of practical experience building production  │
+  │ mobile apps for iOS/ Android across e-commerce, tracking                   │
+  │ systems, booking, social, and dashboard platforms. Experienced in Clean Ar │
+  │ chitecture and BLoC/Cubit.  Integrating maps, payment                      │
+  │ gateways, REST APIs while focusing on performance and clean code. Delivere │
+  │ d production applications, including a Muslim app                          │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Chunk 2 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Hamed Ahmed Hamed                                                          │
+  │ Flutter Developer                                                          │
+  │ hamedelshafeei41 @gmail.com 01094027375 Cairo linkedin github medium       │
+  │ PROFILE                                                                    │
+  │ Flutter Developer with 1 year of practical experience building production  │
+  │ mobile apps for iOS/ Android across e-commerce, tracking                   │
+  │ systems, booking, social, and dashboard platforms. Experienced in Clean Ar │
+  │ chitecture and BLoC/Cubit.  Integrating maps, payment                      │
+  │ gateways, REST APIs while focusing on performance and clean code. Delivere │
+  │ d production applications, including a Muslim app                          │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Chunk 3 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ • Built an AI medical assistant using RAG and added video consultations vi │
+  │ a ZegoCloud while use WebSockets, an offline-first                         │
+  │ approach, maps, and clean architecture.                                    │
+  │ Muslim-Islamic App (App Store) 01/2026 – 02/2026                           │
+  │ The Muslim app delivers 91% prayer times, Azkar, hadith, Sebha, Qibla, and │
+  │  local & FCM with custom sounds and other features.                        │
+  │ ShopSphere – Premium E-Commerce App (App Store ) 12/2025 – 03/2026         │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Chunk 4 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ • Built an AI medical assistant using RAG and added video consultations vi │
+  │ a ZegoCloud while use WebSockets, an offline-first                         │
+  │ approach, maps, and clean architecture.                                    │
+  │ Muslim-Islamic App (App Store) 01/2026 – 02/2026                           │
+  │ The Muslim app delivers 91% prayer times, Azkar, hadith, Sebha, Qibla, and │
+  │  local & FCM with custom sounds and other features.                        │
+  │ ShopSphere – Premium E-Commerce App (App Store ) 12/2025 – 03/2026         │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Status :                   ✓  Context string assembled
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 4 / 4  ·  GENERATE RESPONSE
+────────────────────────────────────────────────────────────────────────────────
+  Model :                    gemini-2.5-flash
+  Est. Prompt Tokens :       ~508 tokens
+  Est. Reply Tokens :        ~157 tokens
+  Answer Length :            631 chars
+
+  [ SYSTEM PROMPT ]
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ You are a helpful assistant. Answer the user's question using ONLY the con │
+  │ text provided. If the answer is not in the context, say: I don't know base │
+  │ d on the provided documents.                                               │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  [ USER TURN  (context + question) ]
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Context:                                                                   │
+  │                                                                            │
+  │ Hamed Ahmed Hamed                                                          │
+  │ Flutter Developer                                                          │
+  │ hamedelshafeei41 @gmail.com 01094027375 Cairo linkedin github medium       │
+  │ PROFILE                                                                    │
+  │ Flutter Developer with 1 year of practical experience building production  │
+  │ mobile apps for iOS/ Android across e-commerce, tracking                   │
+  │ systems, booking, social, and dashboard platforms. Experienced in Clean Ar │
+  │ chitecture and BLoC/Cubit.  Integrating maps, payment                      │
+  │ gateways, REST APIs while focusing on performance and clean code. Delivere │
+  │ d production applications, including a Muslim app                          │
+  │                                                                            │
+  │ Hamed Ahmed Hamed                                                          │
+  │ Flutter Developer                                                          │
+  │ hamedelshafeei41 @gmail.com 01094027375 Cairo linkedin github medium       │
+  │ PROFILE                                                                    │
+  │ Flutter Developer with 1 year of practical experience building production  │
+  │ mobile apps for iOS/ Android across e-commerce, tracking                   │
+  │ systems, booking, social, and dashboard platforms. Experienced in Clean Ar │
+  │ chitecture and BLoC/Cubit.  Integrating maps, payment                      │
+  │ gateways, REST APIs while focusing on performance and clean code. Delivere │
+  │ d production applications, including a Muslim app                          │
+  │                                                                            │
+  │ • Built an AI medical assistant using RAG and added video consultations vi │
+  │ a ZegoCloud while use WebSockets, an offline-first                         │
+  │ approach, maps, and clean architecture.                                    │
+  │ Muslim-Islamic App (App Store) 01/2026 – 02/2026                           │
+  │ The Muslim app delivers 91% prayer times, Azkar, hadith, Sebha, Qibla, and │
+  │  local & FCM with custom sounds and other features.                        │
+  │ ShopSphere – Premium E-Commerce App (App Store ) 12/2025 – 03/2026         │
+  │                                                                            │
+  │ • Built an AI medical assistant using RAG and added video consultations vi │
+  │ a ZegoCloud while use WebSockets, an offline-first                         │
+  │ approach, maps, and clean architecture.                                    │
+  │ Muslim-Islamic App (App Store) 01/2026 – 02/2026                           │
+  │ The Muslim app delivers 91% prayer times, Azkar, hadith, Sebha, Qibla, and │
+  │  local & FCM with custom sounds and other features.                        │
+  │ ShopSphere – Premium E-Commerce App (App Store ) 12/2025 – 03/2026         │
+  │                                                                            │
+  │ Question: how is hamed skills?                                             │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  [ GEMINI ANSWER ]
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Hamed is a Flutter Developer with 1 year of practical experience. His skil │
+  │ ls include:                                                                │
+  │ *   Building production mobile apps for iOS/Android.                       │
+  │ *   Experience in e-commerce, tracking systems, booking, social, and dashb │
+  │ oard platforms.                                                            │
+  │ *   Proficiency in Clean Architecture and BLoC/Cubit.                      │
+  │ *   Integrating maps, payment gateways, and REST APIs.                     │
+  │ *   Focusing on performance and clean code.                                │
+  │ *   Building an AI medical assistant using RAG.                            │
+  │ *   Adding video consultations via ZegoCloud.                              │
+  │ *   Using WebSockets and an offline-first approach.                        │
+  │ *   Delivering features like prayer times, Azkar, hadith, Sebha, Qibla, lo │
+  │ cal & FCM with custom sounds.                                              │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Status :                   ✓  Answer received from Gemini
+
+================================================================================
+  PIPELINE COMPLETE  ·  Total elapsed: 23.02s
+  Finished : 2026-06-27  19:26:53
+================================================================================
+

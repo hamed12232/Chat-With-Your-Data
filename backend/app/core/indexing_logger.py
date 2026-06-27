@@ -193,7 +193,7 @@ def log_embedding(
             vector_dim,
             f"{num_chunks * vector_dim:,}",
         )
-        logger.info("  %-26s %s", "Dtype :",            "float32  (OpenAI default)")
+        logger.info("  %-26s %s", "Dtype :",            "float32")
         logger.info(
             "  %-26s ~%.1f KB",
             "Memory Estimate :",
@@ -202,7 +202,7 @@ def log_embedding(
     else:
         logger.info("  %-26s %s", "Vector Dimensions :", "(probing …)")
 
-    logger.info("  %-26s %s", "Status :",           "✓  Embeddings received from OpenAI")
+    logger.info("  %-26s %s", "Status :",           "✓  Embeddings calculated locally")
     logger.info(BLANK)
 
 
@@ -284,7 +284,7 @@ def log_vectors_table(
     logger.info("  chunk vector (C) using a simple dot product:")
     logger.info(BLANK)
     logger.info("    cos(Q, C)  =  Q · C")
-    logger.info("               =  Q[0]×C[0] + Q[1]×C[1] + … + Q[1535]×C[1535]")
+    logger.info("               =  Q[0]×C[0] + Q[1]×C[1] + … + Q[%d]×C[%d]", vector_dim - 1, vector_dim - 1)
     logger.info(BLANK)
     logger.info("  Score range:   -1.0  →  opposite meaning  (worst)")
     logger.info("                  0.0  →  unrelated")
@@ -393,8 +393,10 @@ def log_chroma_stored(
         if i < len(embeddings) and embeddings[i] is not None:
             vec      = list(embeddings[i])
             emb_peek = f"[{vec[0]:+.3f}, {vec[1]:+.3f}, {vec[2]:+.3f}, …]"
+            v_dim = len(vec)
         else:
             emb_peek = "(not returned)"
+            v_dim = 768
 
         logger.info(tbl_row(short_id, src, chunk_idx, text_prev, emb_peek))
 
@@ -408,7 +410,7 @@ def log_chroma_stored(
     logger.info("    Source File  →  original PDF filename from metadata")
     logger.info("    Chunk#       →  position of this chunk inside the document (0-based)")
     logger.info("    Text Preview →  first ~22 chars of the stored chunk text")
-    logger.info("    Embedding    →  first 3 of 1536 float values stored in Chroma")
+    logger.info("    Embedding    →  first 3 of %d float values stored in Chroma", v_dim)
     logger.info("  " + "·" * (WIDTH - 4))
     logger.info(BLANK)
 

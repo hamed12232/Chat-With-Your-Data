@@ -1,0 +1,11 @@
+{
+  "pythonVersion": "3.14",
+  "pythonPlatform": "Windows",
+  "venvPath": "C:\\Users\\mahmo\\AppData\\Local\\Programs\\Python\\Python314",
+  "pythonPath": "C:\\Users\\mahmo\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+  "extraPaths": [
+    "C:\\Users\\mahmo\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\site-packages"
+  ],
+  "reportMissingImports": false,
+  "reportMissingModuleSource": false
+}

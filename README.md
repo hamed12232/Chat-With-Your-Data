@@ -1,41 +1,36 @@
-# Chat With Your Data
+# RAG API for Flutter
 
-A small **RAG (Retrieval-Augmented Generation)** demo: upload a **PDF**, index it into a **Chroma** vector store, then **chat** with an **OpenAI** model that answers only from your indexed content.
+This repository now contains a backend-only **FastAPI** application designed to be consumed by a Flutter mobile client.
 
-Repository: [YoussefFathy88/Chat-With-Your-Data](https://github.com/YoussefFathy88/Chat-With-Your-Data)
+The API preserves the existing RAG pipeline exactly as implemented:
 
----
-
-## How it works
-
-The UI lets you **index documents** and **ask questions** against what you uploaded. The flow is: **PDF → chunks → embeddings → Chroma → retrieve similar chunks → GPT-4o answer grounded in context.**
-
-![Application demo — indexing and chat UI](frontend/Demo/image.png)
+- LangChain retrieval logic
+- Chroma vector database
+- HuggingFace embeddings (`intfloat/multilingual-e5-base`)
+- Google Gemini integration
+- PDF document ingestion via the server-side indexing pipeline
+- `/chat` endpoint behavior unchanged
 
 ---
 
 ## Stack
 
-| Layer | Technology |
-|--------|------------|
-| Frontend | [Next.js](https://nextjs.org/) 15, React 19, TypeScript, Tailwind CSS |
-| Backend | [FastAPI](https://fastapi.tiangolo.com/), [Uvicorn](https://www.uvicorn.org/) |
-| RAG | [LangChain](https://www.langchain.com/), [Chroma](https://www.trychroma.com/), OpenAI embeddings + **GPT-4o** |
-| Documents | PDF ingestion via PyPDF2 |
+- Backend: [FastAPI](https://fastapi.tiangolo.com/)
+- Runtime: [Uvicorn](https://www.uvicorn.org/)
+- RAG: [LangChain](https://www.langchain.com/), [Chroma](https://www.trychroma.com/), [HuggingFace embeddings](https://huggingface.co/intfloat/multilingual-e5-base), Gemini
+- Documents: PDF ingestion using `PyPDF2`
 
 ---
 
 ## Prerequisites
 
-- **Python** 3.11+ (recommended)
-- **Node.js** 18+ (for the Next.js app)
-- An **[OpenAI API key](https://platform.openai.com/api-keys)** with access to the embedding model and `gpt-4o`
+- Python 3.11+
+- Docker (optional for container deployment)
+- A Google Gemini API key
 
 ---
 
-## Quick start
-
-### 1. Backend API
+## Setup
 
 ```bash
 cd backend
@@ -44,83 +39,119 @@ python -m venv .venv
 
 Activate the virtual environment:
 
-- **Windows (PowerShell):** `.venv\Scripts\Activate.ps1`
-- **macOS / Linux:** `source .venv/bin/activate`
+- Windows (PowerShell): `.venv\Scripts\Activate.ps1`
+- macOS / Linux: `source .venv/bin/activate`
+
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Copy `backend/.env.local.example` to `backend/.env.local` (same folder) before editing.
+Copy `backend/.env.local.example` to `backend/.env.local` and set at least:
 
-Edit **`backend/.env.local`** and set at least:
+- `gemnai_key` (or `google_api_key` / `gemini_api_key`)
 
-- `OPENAI_API_KEY` — your OpenAI secret key
+Optional environment variables:
 
-Optional variables (defaults are in `.env.local.example`): Chroma path, collection name, chunk size, overlap, embedding model, retrieval `top_k`.
-
-Start the API (from `backend` with venv active):
-
-```bash
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-- API base: `http://localhost:8000`
-- Health: [GET `/health`](http://localhost:8000/health)
-- Interactive docs: [http://localhost:8000/docs](http://localhost:8000/docs)
-
-### 2. Frontend
-
-```bash
-cd frontend
-```
-
-Copy `frontend/.env.local.example` to `frontend/.env.local`, then:
-
-```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).  
-`NEXT_PUBLIC_API_URL` in **`frontend/.env.local`** should point at your API (default `http://localhost:8000`).
+- `CHROMA_PERSIST_DIR`
+- `COLLECTION_NAME`
+- `INDEX_CHUNK_SIZE`
+- `INDEX_CHUNK_OVERLAP`
+- `INDEX_EMBEDDING_MODEL`
+- `CHAT_RETRIEVAL_TOP_K`
 
 ---
 
-## Using the app
+## Running locally
 
-1. **Index** — Use the in-app control to upload a **PDF**. The backend extracts text, chunks it, embeds it, and stores vectors in Chroma under `CHROMA_PERSIST_DIR` (see `.env.local.example`).
-2. **Chat** — Ask questions; answers use retrieved chunks and the configured chat model. If nothing is indexed yet, the API returns a clear message asking you to index first.
-
-Structured logs for indexing and chat may be written under `backend/Logs/` (see `chat_logger` / indexing logger in the codebase).
-
----
-
-## API overview
-
-| Method | Path | Purpose |
-|--------|------|--------|
-| `GET` | `/health` | Liveness check |
-| `POST` | `/index/` | Multipart upload: PDF file → index into Chroma |
-| `POST` | `/chat/` | JSON body: `{ "message": "..." }` or `{ "question": "..." }` → `{ "answer": "..." }` |
-
-CORS is enabled for local Next.js ports (`3000`, `3001`).
-
----
-
-## Docker (backend only)
-
-From `backend/`:
+Start the backend API:
 
 ```bash
+cd backend
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000```
+open this http://localhost:8000/docs
+
+Available endpoints:
+
+- `GET /health`
+- `POST /chat/`
+- `POST /index/`
+
+---
+
+## API contract
+
+### `GET /health`
+
+Returns a simple health check:
+
+```json
+{ "status": "ok" }
+```
+
+### `POST /chat/`
+
+Request body:
+
+```json
+{ "message": "..." }
+```
+
+or:
+
+```json
+{ "question": "..." }
+```
+
+Response body:
+
+```json
+{ "answer": "..." }
+```
+
+### `POST /index/`
+
+This endpoint triggers indexing for PDFs available on the server-side documents folder. It is left in place for backend-managed document ingestion.
+
+---
+
+## Deployment
+
+### Docker
+
+Build and run the backend container:
+
+```bash
+cd backend
 docker build -t rag-api .
 docker run --env-file .env.local -p 8000:8000 rag-api
 ```
 
-Ensure `.env.local` exists and contains your secrets before `--env-file`.
+### Railway
+
+1. Create a Railway project and connect this repository.
+2. Set environment variables in Railway:
+   - `gemnai_key` (or `google_api_key` / `gemini_api_key`)
+   - Optional: `CHROMA_PERSIST_DIR`, `COLLECTION_NAME`, `INDEX_CHUNK_SIZE`, `INDEX_CHUNK_OVERLAP`, `INDEX_EMBEDDING_MODEL`, `CHAT_RETRIEVAL_TOP_K`
+3. Use the following start command:
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
+Railway will expose the service automatically on the assigned port.
+
+---
+
+## Notes for Flutter clients
+
+Your Flutter app can consume this API directly by calling `/chat/` for RAG-based answers and `/health` for readiness checks.
+
+If you need to trigger document re-indexing from the backend, `/index/` remains available as a server-managed ingestion endpoint.
 
 ---
 
 ## License
 
-This project is provided as-is for learning and demonstration. Add a `LICENSE` file if you want to specify terms explicitly.
+This repository is provided as-is. Add a `LICENSE` file if you want to specify terms explicitly.

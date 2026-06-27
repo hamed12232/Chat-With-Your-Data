@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, UploadFile
+from fastapi import APIRouter
 from pydantic import BaseModel
 
 from app.services.index_service import index_document
@@ -13,5 +13,5 @@ class IndexResponse(BaseModel):
 
 @router.post("", response_model=IndexResponse)
 @router.post("/", response_model=IndexResponse)
-async def index_documents(file: UploadFile = File(...)):
-    return await index_document(file)
+async def index_documents():
+    return await index_document()
