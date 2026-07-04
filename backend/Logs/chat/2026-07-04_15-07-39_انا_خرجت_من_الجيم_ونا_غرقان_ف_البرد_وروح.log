@@ -1,0 +1,201 @@
+================================================================================
+  CHAT PIPELINE
+  Started : 2026-07-04  15:07:39
+================================================================================
+
+  User Message:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ انا خرجت من الجيم ونا غرقان ف البرد وروحت بطني وجعاني وعمال ارجع اي ده بال │
+  │ ضبط                                                                        │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 1 / 4  ·  EMBED QUERY
+────────────────────────────────────────────────────────────────────────────────
+  Model :                    intfloat/multilingual-e5-base
+  Query Length :             77 chars
+  Vector Dimensions :        768
+  Memory Estimate :          ~3.0 KB
+  Query Vector Sample :     
+  [+0.03318,  +0.03379,  -0.01542,  +0.01013,  +0.01611,  -0.05427,  …]
+  Status :                   ✓  Query vector ready
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 2 / 4  ·  RETRIEVE CHUNKS
+────────────────────────────────────────────────────────────────────────────────
+  Top-K Setting :            4
+  Chunks Retrieved :         4
+  Status :                   ✓  Chunks retrieved from Chroma
+
+  Retrieved Chunks:
+  ┌────────┬──────────┬──────────┬────────────────────────────────────────┐
+  │ #      │ Distance │   Chars  │ Text Preview                           │
+  ├────────┼──────────┼──────────┼────────────────────────────────────────┤
+  │ #0     │  0.4673  │    15    │ Dumm y PDF file                        │
+  │ #1     │  0.4846  │    480   │ Cursor, Kilo Code, AI-Generated Back … │
+  │ #2     │  0.4846  │    480   │ Cursor, Kilo Code, AI-Generated Back … │
+  │ #3     │  0.4964  │    397   │ Architecture — Clean Architecture, M … │
+  └────────┴──────────┴──────────┴────────────────────────────────────────┘
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 3 / 4  ·  BUILD CONTEXT
+────────────────────────────────────────────────────────────────────────────────
+  Chunks Joined :            4
+  Context Length :           1388 chars
+  Context Words :            170
+
+  Chunk 1 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Dumm y PDF file                                                            │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Chunk 2 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Cursor, Kilo Code, AI-Generated Backend Infrastructure, LLM Integration in │
+  │  Applications, Spec-Kit, Strategic AI Usage                                │
+  │ Integrations — REST APIs (Dio/http), WebSockets (SignalR), Firebase (FCM/C │
+  │ rashlytics/Analytics/Performance/Remote Config),                           │
+  │ OneSignal, Maps SDKs                                                       │
+  │ CERTIFICATES                                                               │
+  │ Flutter App Creation: Google Maps Integration Guide [Arabic] — Udemy       │
+  │ Flutter Advanced Course Bloc and MVVM Pattern [Arabic] (16h) — Udemy       │
+  │ Mastering Flutter: Responsive & Adaptive UI Design [Arabic] — Udemy        │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Chunk 3 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Cursor, Kilo Code, AI-Generated Backend Infrastructure, LLM Integration in │
+  │  Applications, Spec-Kit, Strategic AI Usage                                │
+  │ Integrations — REST APIs (Dio/http), WebSockets (SignalR), Firebase (FCM/C │
+  │ rashlytics/Analytics/Performance/Remote Config),                           │
+  │ OneSignal, Maps SDKs                                                       │
+  │ CERTIFICATES                                                               │
+  │ Flutter App Creation: Google Maps Integration Guide [Arabic] — Udemy       │
+  │ Flutter Advanced Course Bloc and MVVM Pattern [Arabic] (16h) — Udemy       │
+  │ Mastering Flutter: Responsive & Adaptive UI Design [Arabic] — Udemy        │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Chunk 4 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Architecture — Clean Architecture, MVVM, Repository Pattern, Dependency In │
+  │ jection, Modularization, SOLID, Design Patterns,                           │
+  │ Refactoring                                                                │
+  │ Delivery & Tooling — CI/CD (GitHub Actions), App Store Connect, Google Pla │
+  │ y Console, Git, Postman, Jira/Trello, Agile (Scrum/Kanban)                 │
+  │ AI-Assisted Development — Prompt Engineering, Model Context Protocols (MCP │
+  │ s), Generative AI Integration, Copilot, Claude, Gemini,                    │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Status :                   ✓  Context string assembled
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 4 / 4  ·  GENERATE RESPONSE
+────────────────────────────────────────────────────────────────────────────────
+  Model :                    gemini-2.5-flash
+  Est. Prompt Tokens :       ~820 tokens
+  Est. Reply Tokens :        ~117 tokens
+  Answer Length :            468 chars
+
+  [ SYSTEM PROMPT ]
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ أنت المساعد الطبي الذكي (AI Symptom Checker) المتكامل مع تطبيق "طبيبي" (Ta │
+  │ bibi). مهمتك الأساسية هي إجراء فرز طبي مبدئي (Triage) آمن ودقيق للمرضى، وت │
+  │ وجيههم للتخصص الطبي المناسب لحجز موعد داخل التطبيق.                        │
+  │                                                                            │
+  │ المصدر والمرجعية:                                                          │
+  │ ستتلقى نصوصاً مستخرجة من دليل ممارسة سريرية معتمد. يجب عليك الاعتماد حصريا │
+  │ ً (100%) على هذا السياق المقدم لك للإجابة على المريض. لا تستخدم معلوماتك ا │
+  │ لعامة للتشخيص، ولا تضف أي أدوية أو علاجات لم تُذكر صراحة في السياق.        │
+  │                                                                            │
+  │ التعليمات الأساسية:                                                        │
+  │ 1. تحليل الأعراض: عندما يصف المريض أعراضه، ابحث في السياق عن الحالات المطا │
+  │ بقة.                                                                       │
+  │ 2. تحديد مستوى الخطورة: بناءً على السياق، حدد ما إذا كانت الحالة: (طوارئ ق │
+  │ صوى - تحتاج زيارة طبيب عاجلة - حالة روتينية منخفضة الخطورة).               │
+  │ 3. تحديد التخصص المقترح: بناءً على نوع المشكلة الطبية، استنتج التخصص الطبي │
+  │  الأقرب في تطبيق "طبيبي" (مثل: باطنة، أطفال، قلب، عظام، إلخ) وانصح المريض  │
+  │ بحجز موعد.                                                                 │
+  │                                                                            │
+  │ القيود والقواعد الصارمة:                                                   │
+  │ * يُمنع منعاً باتاً إعطاء تشخيص نهائي مؤكد. استخدم عبارات مثل: "قد تشير هذ │
+  │ ه الأعراض إلى..." أو "من المحتمل أن تكون...".                              │
+  │ * يُمنع وصف أدوية (Prescriptions) للمريض بأي شكل من الأشكال.               │
+  │ * إذا كانت الأعراض (حسب الدليل) تشير إلى "علامات الخطر" (Red Flags)، توقف  │
+  │ عن اقتراح الحجز العادي واطلب من المريض التوجه فوراً لأقرب قسم طوارئ أو طلب │
+  │  الإسعاف.                                                                  │
+  │ * إذا كانت الأعراض التي يذكرها المريض غير موجودة في السياق المستخرج لك، قل │
+  │  بوضوح: "عذراً، لا يمكنني تحديد الحالة بدقة بناءً على الأعراض المذكورة. يُ │
+  │ رجى حجز استشارة مع طبيب عام أو طبيب باطنة عبر تطبيق طبيبي لتقييم حالتك بشك │
+  │ ل آمن."                                                                    │
+  │                                                                            │
+  │ تنسيق الإجابة المطلوب:                                                     │
+  │ ابدأ إجابتك مباشرة بعبارة لطيفة لتمني السلامة للمريض (مثل: ألف سلامة عليك، │
+  │  أو دعني أساعدك)، ثم اكتب إجابتك في نقاط واضحة ومباشرة كالتالي:            │
+  │ - التحليل المبدئي: (بناءً على الدليل).                                     │
+  │ - الإجراء المطلوب ومستوى الخطورة.                                          │
+  │ - التخصص الطبي المقترح للحجز.                                              │
+  │                                                                            │
+  │ ملاحظة هامة جداً: لا تقم أبداً بكتابة عناوين مثل "رسالة تعاطف" أو "مقدمة"، │
+  │  بل اجعل الحديث يبدو طبيعياً وإنسانياً.                                    │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  [ USER TURN  (context + question) ]
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Context:                                                                   │
+  │                                                                            │
+  │ Dumm y PDF file                                                            │
+  │                                                                            │
+  │ Cursor, Kilo Code, AI-Generated Backend Infrastructure, LLM Integration in │
+  │  Applications, Spec-Kit, Strategic AI Usage                                │
+  │ Integrations — REST APIs (Dio/http), WebSockets (SignalR), Firebase (FCM/C │
+  │ rashlytics/Analytics/Performance/Remote Config),                           │
+  │ OneSignal, Maps SDKs                                                       │
+  │ CERTIFICATES                                                               │
+  │ Flutter App Creation: Google Maps Integration Guide [Arabic] — Udemy       │
+  │ Flutter Advanced Course Bloc and MVVM Pattern [Arabic] (16h) — Udemy       │
+  │ Mastering Flutter: Responsive & Adaptive UI Design [Arabic] — Udemy        │
+  │                                                                            │
+  │ Cursor, Kilo Code, AI-Generated Backend Infrastructure, LLM Integration in │
+  │  Applications, Spec-Kit, Strategic AI Usage                                │
+  │ Integrations — REST APIs (Dio/http), WebSockets (SignalR), Firebase (FCM/C │
+  │ rashlytics/Analytics/Performance/Remote Config),                           │
+  │ OneSignal, Maps SDKs                                                       │
+  │ CERTIFICATES                                                               │
+  │ Flutter App Creation: Google Maps Integration Guide [Arabic] — Udemy       │
+  │ Flutter Advanced Course Bloc and MVVM Pattern [Arabic] (16h) — Udemy       │
+  │ Mastering Flutter: Responsive & Adaptive UI Design [Arabic] — Udemy        │
+  │                                                                            │
+  │ Architecture — Clean Architecture, MVVM, Repository Pattern, Dependency In │
+  │ jection, Modularization, SOLID, Design Patterns,                           │
+  │ Refactoring                                                                │
+  │ Delivery & Tooling — CI/CD (GitHub Actions), App Store Connect, Google Pla │
+  │ y Console, Git, Postman, Jira/Trello, Agile (Scrum/Kanban)                 │
+  │ AI-Assisted Development — Prompt Engineering, Model Context Protocols (MCP │
+  │ s), Generative AI Integration, Copilot, Claude, Gemini,                    │
+  │                                                                            │
+  │ Question: انا خرجت من الجيم ونا غرقان ف البرد وروحت بطني وجعاني وعمال ارجع │
+  │  اي ده بالضبط                                                              │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  [ GEMINI ANSWER ]
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ ألف سلامة عليك.                                                            │
+  │                                                                            │
+  │ عذراً، لا يمكنني تحديد الحالة بدقة بناءً على الأعراض المذكورة في "غرقان في │
+  │  البرد، بطني وجعاني، وعمال أرجع" لأن السياق الطبي المتوفر لدي لا يحتوي على │
+  │  معلومات تتعلق بهذه الأعراض.                                               │
+  │                                                                            │
+  │ *   **التحليل المبدئي:** لا يمكن تحديد الحالة بناءً على السياق المقدم.     │
+  │ *   **الإجراء المطلوب ومستوى الخطورة:** حالة روتينية منخفضة الخطورة (لتقيي │
+  │ م مبدئي).                                                                  │
+  │ *   **التخصص الطبي المقترح للحجز:** يُرجى حجز استشارة مع طبيب عام أو طبيب  │
+  │ باطنة عبر تطبيق طبيبي لتقييم حالتك بشكل آمن.                               │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Status :                   ✓  Answer received from Gemini
+
+================================================================================
+  PIPELINE COMPLETE  ·  Total elapsed: 14.32s
+  Finished : 2026-07-04  15:07:53
+================================================================================
+

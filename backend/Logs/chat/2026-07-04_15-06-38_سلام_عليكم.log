@@ -1,0 +1,196 @@
+================================================================================
+  CHAT PIPELINE
+  Started : 2026-07-04  15:06:39
+================================================================================
+
+  User Message:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ سلام عليكم                                                                 │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 1 / 4  ·  EMBED QUERY
+────────────────────────────────────────────────────────────────────────────────
+  Model :                    intfloat/multilingual-e5-base
+  Query Length :             10 chars
+  Vector Dimensions :        768
+  Memory Estimate :          ~3.0 KB
+  Query Vector Sample :     
+  [+0.03241,  +0.06850,  -0.01224,  +0.01788,  +0.03289,  -0.01477,  …]
+  Status :                   ✓  Query vector ready
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 2 / 4  ·  RETRIEVE CHUNKS
+────────────────────────────────────────────────────────────────────────────────
+  Top-K Setting :            4
+  Chunks Retrieved :         4
+  Status :                   ✓  Chunks retrieved from Chroma
+
+  Retrieved Chunks:
+  ┌────────┬──────────┬──────────┬────────────────────────────────────────┐
+  │ #      │ Distance │   Chars  │ Text Preview                           │
+  ├────────┼──────────┼──────────┼────────────────────────────────────────┤
+  │ #0     │  0.4442  │    15    │ Dumm y PDF file                        │
+  │ #1     │  0.4750  │    407   │ • Built an AI medical assistant usin … │
+  │ #2     │  0.4750  │    407   │ • Built an AI medical assistant usin … │
+  │ #3     │  0.5018  │    437   │ Solid Principles Certificate — Udemy … │
+  └────────┴──────────┴──────────┴────────────────────────────────────────┘
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 3 / 4  ·  BUILD CONTEXT
+────────────────────────────────────────────────────────────────────────────────
+  Chunks Joined :            4
+  Context Length :           1282 chars
+  Context Words :            194
+
+  Chunk 1 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Dumm y PDF file                                                            │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Chunk 2 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ • Built an AI medical assistant using RAG and added video consultations vi │
+  │ a ZegoCloud while use WebSockets, an offline-first                         │
+  │ approach, maps, and clean architecture.                                    │
+  │ Muslim-Islamic App (App Store) 01/2026 – 02/2026                           │
+  │ The Muslim app delivers 91% prayer times, Azkar, hadith, Sebha, Qibla, and │
+  │  local & FCM with custom sounds and other features.                        │
+  │ ShopSphere – Premium E-Commerce App (App Store ) 12/2025 – 03/2026         │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Chunk 3 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ • Built an AI medical assistant using RAG and added video consultations vi │
+  │ a ZegoCloud while use WebSockets, an offline-first                         │
+  │ approach, maps, and clean architecture.                                    │
+  │ Muslim-Islamic App (App Store) 01/2026 – 02/2026                           │
+  │ The Muslim app delivers 91% prayer times, Azkar, hadith, Sebha, Qibla, and │
+  │  local & FCM with custom sounds and other features.                        │
+  │ ShopSphere – Premium E-Commerce App (App Store ) 12/2025 – 03/2026         │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Chunk 4 / 4:
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Solid Principles Certificate — Udemy                                       │
+  │ Mobile App Instructor (Flutter) [4 monthes] — Az-SENCS                     │
+  │ Certificate in Mobile Application Devolper using Flutter (120h) — ITI      │
+  │ Complete Flutter & Dart Development (Arabic) [54h] — Udemy                 │
+  │ Flutter Development Diplome (60h) — Easy Learn Academy                     │
+  │ EF SET English Certificate (B1 Intermediate) — EF SET                      │
+  │ Honorable Mention in the 2023 ECPC Qualifications — ICPC                   │
+  │ LANGUAGES                                                                  │
+  │ Arabic                                                                     │
+  │ (Native)English                                                            │
+  │ B1 (Intermediate)                                                          │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Status :                   ✓  Context string assembled
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP 4 / 4  ·  GENERATE RESPONSE
+────────────────────────────────────────────────────────────────────────────────
+  Model :                    gemini-2.5-flash
+  Est. Prompt Tokens :       ~776 tokens
+  Est. Reply Tokens :        ~73 tokens
+  Answer Length :            292 chars
+
+  [ SYSTEM PROMPT ]
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ أنت المساعد الطبي الذكي (AI Symptom Checker) المتكامل مع تطبيق "طبيبي" (Ta │
+  │ bibi). مهمتك الأساسية هي إجراء فرز طبي مبدئي (Triage) آمن ودقيق للمرضى، وت │
+  │ وجيههم للتخصص الطبي المناسب لحجز موعد داخل التطبيق.                        │
+  │                                                                            │
+  │ المصدر والمرجعية:                                                          │
+  │ ستتلقى نصوصاً مستخرجة من دليل ممارسة سريرية معتمد. يجب عليك الاعتماد حصريا │
+  │ ً (100%) على هذا السياق المقدم لك للإجابة على المريض. لا تستخدم معلوماتك ا │
+  │ لعامة للتشخيص، ولا تضف أي أدوية أو علاجات لم تُذكر صراحة في السياق.        │
+  │                                                                            │
+  │ التعليمات الأساسية:                                                        │
+  │ 1. تحليل الأعراض: عندما يصف المريض أعراضه، ابحث في السياق عن الحالات المطا │
+  │ بقة.                                                                       │
+  │ 2. تحديد مستوى الخطورة: بناءً على السياق، حدد ما إذا كانت الحالة: (طوارئ ق │
+  │ صوى - تحتاج زيارة طبيب عاجلة - حالة روتينية منخفضة الخطورة).               │
+  │ 3. تحديد التخصص المقترح: بناءً على نوع المشكلة الطبية، استنتج التخصص الطبي │
+  │  الأقرب في تطبيق "طبيبي" (مثل: باطنة، أطفال، قلب، عظام، إلخ) وانصح المريض  │
+  │ بحجز موعد.                                                                 │
+  │                                                                            │
+  │ القيود والقواعد الصارمة:                                                   │
+  │ * يُمنع منعاً باتاً إعطاء تشخيص نهائي مؤكد. استخدم عبارات مثل: "قد تشير هذ │
+  │ ه الأعراض إلى..." أو "من المحتمل أن تكون...".                              │
+  │ * يُمنع وصف أدوية (Prescriptions) للمريض بأي شكل من الأشكال.               │
+  │ * إذا كانت الأعراض (حسب الدليل) تشير إلى "علامات الخطر" (Red Flags)، توقف  │
+  │ عن اقتراح الحجز العادي واطلب من المريض التوجه فوراً لأقرب قسم طوارئ أو طلب │
+  │  الإسعاف.                                                                  │
+  │ * إذا كانت الأعراض التي يذكرها المريض غير موجودة في السياق المستخرج لك، قل │
+  │  بوضوح: "عذراً، لا يمكنني تحديد الحالة بدقة بناءً على الأعراض المذكورة. يُ │
+  │ رجى حجز استشارة مع طبيب عام أو طبيب باطنة عبر تطبيق طبيبي لتقييم حالتك بشك │
+  │ ل آمن."                                                                    │
+  │                                                                            │
+  │ تنسيق الإجابة المطلوب:                                                     │
+  │ ابدأ إجابتك مباشرة بعبارة لطيفة لتمني السلامة للمريض (مثل: ألف سلامة عليك، │
+  │  أو دعني أساعدك)، ثم اكتب إجابتك في نقاط واضحة ومباشرة كالتالي:            │
+  │ - التحليل المبدئي: (بناءً على الدليل).                                     │
+  │ - الإجراء المطلوب ومستوى الخطورة.                                          │
+  │ - التخصص الطبي المقترح للحجز.                                              │
+  │                                                                            │
+  │ ملاحظة هامة جداً: لا تقم أبداً بكتابة عناوين مثل "رسالة تعاطف" أو "مقدمة"، │
+  │  بل اجعل الحديث يبدو طبيعياً وإنسانياً.                                    │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  [ USER TURN  (context + question) ]
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ Context:                                                                   │
+  │                                                                            │
+  │ Dumm y PDF file                                                            │
+  │                                                                            │
+  │ • Built an AI medical assistant using RAG and added video consultations vi │
+  │ a ZegoCloud while use WebSockets, an offline-first                         │
+  │ approach, maps, and clean architecture.                                    │
+  │ Muslim-Islamic App (App Store) 01/2026 – 02/2026                           │
+  │ The Muslim app delivers 91% prayer times, Azkar, hadith, Sebha, Qibla, and │
+  │  local & FCM with custom sounds and other features.                        │
+  │ ShopSphere – Premium E-Commerce App (App Store ) 12/2025 – 03/2026         │
+  │                                                                            │
+  │ • Built an AI medical assistant using RAG and added video consultations vi │
+  │ a ZegoCloud while use WebSockets, an offline-first                         │
+  │ approach, maps, and clean architecture.                                    │
+  │ Muslim-Islamic App (App Store) 01/2026 – 02/2026                           │
+  │ The Muslim app delivers 91% prayer times, Azkar, hadith, Sebha, Qibla, and │
+  │  local & FCM with custom sounds and other features.                        │
+  │ ShopSphere – Premium E-Commerce App (App Store ) 12/2025 – 03/2026         │
+  │                                                                            │
+  │ Solid Principles Certificate — Udemy                                       │
+  │ Mobile App Instructor (Flutter) [4 monthes] — Az-SENCS                     │
+  │ Certificate in Mobile Application Devolper using Flutter (120h) — ITI      │
+  │ Complete Flutter & Dart Development (Arabic) [54h] — Udemy                 │
+  │ Flutter Development Diplome (60h) — Easy Learn Academy                     │
+  │ EF SET English Certificate (B1 Intermediate) — EF SET                      │
+  │ Honorable Mention in the 2023 ECPC Qualifications — ICPC                   │
+  │ LANGUAGES                                                                  │
+  │ Arabic                                                                     │
+  │ (Native)English                                                            │
+  │ B1 (Intermediate)                                                          │
+  │                                                                            │
+  │ Question: سلام عليكم                                                       │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  [ GEMINI ANSWER ]
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ أهلاً بك، وعليكم السلام.                                                   │
+  │                                                                            │
+  │ عذراً، لم تذكر أي أعراض طبية حتى أتمكن من مساعدتك. يُرجى وصف الأعراض التي  │
+  │ تشعر بها حتى أتمكن من تقديم تقييم مبدئي لك بناءً على المعلومات المتاحة لدي │
+  │ .                                                                          │
+  │                                                                            │
+  │ إذا كنت ترغب في استشارة عامة أو لتقييم حالتك بشكل آمن، يمكنك حجز استشارة م │
+  │ ع طبيب عام أو طبيب باطنة عبر تطبيق طبيبي.                                  │
+  └────────────────────────────────────────────────────────────────────────────┘
+
+  Status :                   ✓  Answer received from Gemini
+
+================================================================================
+  PIPELINE COMPLETE  ·  Total elapsed: 22.18s
+  Finished : 2026-07-04  15:07:01
+================================================================================
+

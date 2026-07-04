@@ -15,7 +15,7 @@ class Settings(BaseSettings):
 
     # Server-side PDF documents directory for indexing.
     # Change this path to point to the managed PDF folder on the server.
-    server_documents_dir: str = "backend/assets/Hamed_Ahmed_Hamed__Resume_Updated.pdf"
+    server_documents_dir: str = "backend/assets/guideline-170-ar.pdf"
 
     # Indexing pipeline
     index_chunk_size: int = 500
